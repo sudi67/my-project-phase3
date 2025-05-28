@@ -1,17 +1,19 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from .base import Base
 
 class FoodEntry(Base):
-    __tablename__ = 'food_entries'
+    __tablename__ = 'foodentries'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    food = Column(String, nullable=False)
-    calories = Column(Integer, nullable=False)
-    date = Column(Date, nullable=False)
+    name = Column(String, nullable=False)
+    calories = Column(Float, nullable=False)
+    protein = Column(Float, nullable=True)
+    fat = Column(Float, nullable=True)
+    carbs = Column(Float, nullable=True)
 
-    user = relationship('User', back_populates='food_entries')
+    user = relationship('User', back_populates='foodentries')
 
     def __repr__(self):
-        return f"<FoodEntry(id={self.id}, food='{self.food}', calories={self.calories}, date={self.date})>"
+        return f"<FoodEntry(id={self.id}, name='{self.name}', calories={self.calories})>"
