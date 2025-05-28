@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 Health Simplified CLI Application Package Initialization
 
@@ -13,3 +14,6 @@ __all__ = ['models', 'cli']
 from .models import Base, User, FoodEntry, Goal, MealPlan
 from .cli import cli
 
+=======
+# This file makes health_tracker a package
+>>>>>>> e08c1f3 (Add database connection setup and comprehensive CRUD tests for models)
