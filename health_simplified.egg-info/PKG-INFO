@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: health_simplified
+Version: 0.1.0
+Summary: Health Simplified CLI Application
+Author: Student
+Requires-Python: >=3.7
+Requires-Dist: click
+Requires-Dist: SQLAlchemy
