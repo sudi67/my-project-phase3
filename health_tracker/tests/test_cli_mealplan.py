@@ -22,7 +22,7 @@ class TestCLI_MealPlan(unittest.TestCase):
 
     def test_create_list_update_delete_mealplan(self):
         # Create mealplan
-        result = self.runner.invoke(mealplan, ['create', '--user_id', str(self.user.id), '--date', '2023-01-01', '--meal_type', 'breakfast'])
+        result = self.runner.invoke(mealplan, ['create', '--user-id', str(self.user.id), '--date', '2023-01-01', '--meal-type', 'breakfast'])
         self.assertIn('MealPlan created', result.output)
 
         # List mealplans
@@ -42,16 +42,16 @@ class TestCLI_MealPlan(unittest.TestCase):
         self.assertIsNotNone(mealplan_id)
 
         # Update mealplan
-        result = self.runner.invoke(mealplan, ['update', '--id', mealplan_id, '--meal_type', 'lunch'])
+        result = self.runner.invoke(mealplan, ['update', '--mealplan-id', mealplan_id, '--meal-type', 'lunch'])
         self.assertIn('MealPlan updated', result.output)
 
         # Delete mealplan
-        result = self.runner.invoke(mealplan, ['delete', '--id', mealplan_id])
+        result = self.runner.invoke(mealplan, ['delete', '--mealplan-id', mealplan_id])
         self.assertIn('MealPlan deleted', result.output)
 
         # List again to confirm deletion
         result = self.runner.invoke(mealplan, ['list'])
-        self.assertIn('No mealplans found', result.output)
+        self.assertIn('No mealplans found.', result.output)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,54 +1,70 @@
-# Health Simplified CLI Application
+# Health Tracker CLI Application
 
-This is a command-line interface (CLI) application designed to help users track daily food intake, set nutrition goals, and plan weekly meals efficiently.
+## Overview
 
-## Features
+This project is a Health Tracker CLI application implemented in Python. It uses SQLAlchemy ORM for database operations and Click for command-line interface commands. The application manages users, food entries, meal plans, and goals.
 
-- User management: create and list users
-- Food entry tracking: add, list, update, and delete food entries
-- Nutrition goals: set and list daily and weekly calorie goals
-- Reporting: generate reports on progress against goals
-- Meal planning: create and update weekly meal plans
+## Project Structure
 
-## Installation
+- `health_tracker/`: Main package containing modules for CLI commands, models, and database operations.
+  - `cli.py`: Main CLI entry point using Click.
+  - `models/`: Contains SQLAlchemy models and CLI controllers for different entities.
+  - `db/`: Database setup, session management, and operations.
+  - `tests/`: Unit and integration tests for CLI commands and database operations.
 
-Install the package using pip:
+## Database
 
-```
-pip install .
-```
+- Uses SQLite by default for testing (`test.db`).
+- Supports PostgreSQL if configured via `DATABASE_URL` environment variable.
+- Database schema includes tables for users, food entries, meal plans, and goals.
+- Database initialization is done via `init_db()` function.
 
-This will install the `myapp` CLI command.
+## CLI Commands
 
-## Usage
-
-Initialize the database:
-
-```
-myapp init
-```
-
-Create a user:
-
-```
-myapp user create --name "Alice"
-```
-
-List users:
-
-```
-myapp user list
-```
-
-More commands will be added as development progresses.
-
-## Development
-
-- Python 3.x
-- SQLAlchemy ORM for database modeling
-- Click for CLI parsing
-- SQLite backend by default (can be changed to PostgreSQL)
+- User management: create, list, delete users.
+- Food entry management: create, list, update, delete food entries.
+- Meal plan management: create, list, update, delete meal plans.
+- Commands are implemented using Click groups and options.
 
 ## Testing
 
-Tests are located in the `tests/` directory and can be run with pytest.
+- Unit tests cover individual CLI commands and database operations.
+- Integration tests cover user, food entry, and meal plan workflows.
+- Tests use Click's `CliRunner` for invoking CLI commands.
+- Database is initialized before tests and uses SQLite for isolation.
+- Some tests dynamically retrieve user IDs to avoid hardcoded values.
+
+## Known Issues
+
+- Integration test for food entry creation currently fails due to database session or transaction handling issues.
+- Database logs show rollbacks after user selection, indicating possible session conflicts.
+- Investigation and fixes are ongoing to resolve these issues.
+
+## How to Run
+
+1. Install dependencies from `requirements.txt`.
+2. Initialize the database:
+   ```
+   python -m health_tracker.cli init
+   ```
+3. Use CLI commands to manage users, food entries, and meal plans:
+   ```
+   python -m health_tracker.cli user create --name Alice --email alice@example.com
+   python -m health_tracker.cli foodentry create --user-id 1 --name Apple --calories 95
+   python -m health_tracker.cli mealplan create --user-id 1 --date 2024-01-01 --meal-type breakfast
+   ```
+4. Run tests:
+   ```
+   pytest
+   ```
+
+## Next Steps
+
+- Fix integration test failures by reviewing database session and transaction management.
+- Add more detailed logging for debugging.
+- Ensure all CLI commands work correctly in integration scenarios.
+- Perform thorough testing of all features and edge cases.
+
+## Contact
+
+For questions or contributions, please contact the project maintainer.

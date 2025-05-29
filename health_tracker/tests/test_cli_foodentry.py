@@ -22,7 +22,7 @@ class TestCLI_FoodEntry(unittest.TestCase):
 
     def test_create_list_update_delete_foodentry(self):
         # Create foodentry
-        result = self.runner.invoke(foodentry, ['create', '--user_id', str(self.user.id), '--name', 'Banana', '--calories', '105'])
+        result = self.runner.invoke(foodentry, ['create', '--user-id', str(self.user.id), '--name', 'Banana', '--calories', '105'])
         self.assertIn('FoodEntry created', result.output)
 
         # List foodentries
@@ -42,11 +42,11 @@ class TestCLI_FoodEntry(unittest.TestCase):
         self.assertIsNotNone(foodentry_id)
 
         # Update foodentry
-        result = self.runner.invoke(foodentry, ['update', '--id', foodentry_id, '--calories', '110'])
+        result = self.runner.invoke(foodentry, ['update', '--foodentry-id', foodentry_id, '--calories', '110'])
         self.assertIn('FoodEntry updated', result.output)
 
         # Delete foodentry
-        result = self.runner.invoke(foodentry, ['delete', '--id', foodentry_id])
+        result = self.runner.invoke(foodentry, ['delete', '--foodentry-id', foodentry_id])
         self.assertIn('FoodEntry deleted', result.output)
 
         # List again to confirm deletion
