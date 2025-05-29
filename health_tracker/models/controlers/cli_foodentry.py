@@ -8,7 +8,7 @@ def foodentry():
     pass
 
 @foodentry.command()
-@click.option('--user_id', required=True, type=int, help='User ID')
+@click.option('--user-id', required=True, type=int, help='User ID')
 @click.option('--name', required=True, help='Food name')
 @click.option('--calories', required=True, type=float, help='Calories')
 @click.option('--protein', type=float, help='Protein')
@@ -17,9 +17,17 @@ def foodentry():
 def create(user_id, name, calories, protein, fat, carbs):
     """Create a new food entry."""
     session = SessionLocal()
-    foodentry = create_foodentry(session, user_id=user_id, name=name, calories=calories, protein=protein, fat=fat, carbs=carbs)
-    click.echo(f"FoodEntry created: {foodentry}")
-    session.close()
+    try:
+        click.echo("DEBUG: Starting create_foodentry", err=True)
+        foodentry = create_foodentry(session, user_id=user_id, name=name, calories=calories, protein=protein, fat=fat, carbs=carbs)
+        click.echo(f"FoodEntry created: {foodentry}")
+        click.echo("DEBUG: Finished create_foodentry", err=True)
+    except Exception as e:
+        click.echo(f"Error creating FoodEntry: {e}", err=True)
+        session.rollback()
+        raise
+    finally:
+        session.close()
 
 @foodentry.command()
 def list():
@@ -34,7 +42,7 @@ def list():
     session.close()
 
 @foodentry.command()
-@click.option('--id', 'foodentry_id', required=True, type=int, help='FoodEntry ID')
+@click.option('--foodentry-id', 'foodentry_id', required=True, type=int, help='FoodEntry ID')
 @click.option('--name', help='New food name')
 @click.option('--calories', type=float, help='New calories')
 @click.option('--protein', type=float, help='New protein')
@@ -51,7 +59,7 @@ def update(foodentry_id, name, calories, protein, fat, carbs):
     session.close()
 
 @foodentry.command()
-@click.option('--id', 'foodentry_id', required=True, type=int, help='FoodEntry ID')
+@click.option('--foodentry-id', 'foodentry_id', required=True, type=int, help='FoodEntry ID')
 def delete(foodentry_id):
     """Delete a food entry."""
     session = SessionLocal()
