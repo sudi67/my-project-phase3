@@ -1,11 +1,10 @@
 import click
 from health_tracker.db import SessionLocal
-from health_tracker.db_operations import create_foodentry, update_foodentry, delete_foodentry
+from health_tracker.db.db_operations import create_foodentry, update_foodentry, delete_foodentry
 from health_tracker.models import FoodEntry
 
 @click.group()
 def foodentry():
-    
     pass
 
 @foodentry.command()
