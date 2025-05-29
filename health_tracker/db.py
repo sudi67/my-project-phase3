@@ -17,9 +17,14 @@ engine = create_engine(DATABASE_URL, echo=True)
 
 SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
+from health_tracker.models.base import Base
+
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+def init_db():
+    Base.metadata.create_all(bind=engine)
