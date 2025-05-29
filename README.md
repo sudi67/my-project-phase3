@@ -34,6 +34,16 @@ This project is a Health Tracker CLI application implemented in Python. It uses 
 - Database is initialized before tests and uses SQLite for isolation.
 - Some tests dynamically retrieve user IDs to avoid hardcoded values.
 
+### How to Run Tests
+
+To run all tests, use the following command in the project root directory:
+
+```bash
+pytest --disable-warnings -q
+```
+
+This will run all unit and integration tests quietly, suppressing warnings.
+
 ## Known Issues
 
 - Integration test for food entry creation currently fails due to database session or transaction handling issues.
@@ -53,10 +63,7 @@ This project is a Health Tracker CLI application implemented in Python. It uses 
    python -m health_tracker.cli foodentry create --user-id 1 --name Apple --calories 95
    python -m health_tracker.cli mealplan create --user-id 1 --date 2024-01-01 --meal-type breakfast
    ```
-4. Run tests:
-   ```
-   pytest
-   ```
+4. Run tests as described above.
 
 ## Next Steps
 
