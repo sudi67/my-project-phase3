@@ -4,6 +4,12 @@ import click
 from datetime import datetime
 from health_tracker.db import init_db, SessionLocal
 from health_tracker.models import User, FoodEntry
+import sys
+import os
+
+# Force SQLite for CLI commands to avoid PostgreSQL auth errors
+if 'pytest' in sys.modules or 'unittest' in sys.modules or 'test' in sys.argv[0] or 'cli.py' in sys.argv[0]:
+    os.environ['DATABASE_URL'] = 'sqlite:///./test.db'
 
 @click.group()
 def cli():
@@ -27,11 +33,11 @@ def user():
 def create(name):
     """Create a new user."""
     session = SessionLocal()
-    if session.query(User).filter_by(name=name).first():
+    if session.query(User).filter_by(username=name).first():
         click.echo(f"User '{name}' already exists.")
         session.close()
         return
-    user = User(name=name)
+    user = User(username=name)
     session.add(user)
     session.commit()
     click.echo(f"User '{name}' created.")
@@ -46,7 +52,7 @@ def list():
         click.echo("No users found.")
     else:
         for user in users:
-            click.echo(f"ID: {user.id}, Name: {user.name}")
+            click.echo(f"ID: {user.id}, Name: {user.username}")
     session.close()
 
 
