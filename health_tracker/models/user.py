@@ -9,7 +9,7 @@ class User(Base):
     username = Column(String, unique=True, nullable=False)
     email = Column(String, unique=True, nullable=False)
 
-    goals = relationship('Goal', back_populates='user', cascade='all, delete-orphan')
+
     mealplans = relationship('MealPlan', back_populates='user', cascade='all, delete-orphan')
     foodentries = relationship('FoodEntry', back_populates='user', cascade='all, delete-orphan')
 
