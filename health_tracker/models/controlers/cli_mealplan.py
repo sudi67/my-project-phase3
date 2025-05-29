@@ -1,12 +1,11 @@
 import click
 import datetime
 from health_tracker.db import SessionLocal
-from health_tracker.db_operations import create_mealplan, update_mealplan, delete_mealplan
+from health_tracker.db.db_operations import create_mealplan, update_mealplan, delete_mealplan
 from health_tracker.models import MealPlan
 
 @click.group()
 def mealplan():
-    
     pass
 
 @mealplan.command()
