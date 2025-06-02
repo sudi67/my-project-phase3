@@ -20,13 +20,18 @@ def create(user_id, name, calories, protein, fat, carbs):
     try:
         click.echo("DEBUG: Starting create_foodentry", err=True)
         foodentry = create_foodentry(session, user_id=user_id, name=name, calories=calories, protein=protein, fat=fat, carbs=carbs)
-        click.echo(f"FoodEntry created: {foodentry}")
+        click.echo(f"DEBUG: FoodEntry object: {foodentry}", err=True)
+        click.echo(f"FoodEntry created with ID: {foodentry.id}")
         click.echo("DEBUG: Finished create_foodentry", err=True)
     except Exception as e:
         click.echo(f"Error creating FoodEntry: {e}", err=True)
         session.rollback()
+        click.echo("DEBUG: Rolled back session due to error", err=True)
+        import traceback
+        click.echo(traceback.format_exc(), err=True)
         raise
     finally:
+        click.echo("DEBUG: Closing session in create_foodentry", err=True)
         session.close()
 
 @foodentry.command()
@@ -63,9 +68,20 @@ def update(foodentry_id, name, calories, protein, fat, carbs):
 def delete(foodentry_id):
     """Delete a food entry."""
     session = SessionLocal()
-    success = delete_foodentry(session, foodentry_id)
-    if success:
-        click.echo("FoodEntry deleted.")
-    else:
-        click.echo("FoodEntry not found.")
-    session.close()
+    try:
+        click.echo("DEBUG: Starting delete_foodentry", err=True)
+        success = delete_foodentry(session, foodentry_id)
+        if success:
+            click.echo("FoodEntry deleted.")
+        else:
+            click.echo("FoodEntry not found.")
+        click.echo("DEBUG: Finished delete_foodentry", err=True)
+    except Exception as e:
+        click.echo(f"Error deleting FoodEntry: {e}", err=True)
+        session.rollback()
+        import traceback
+        click.echo(traceback.format_exc(), err=True)
+        raise
+    finally:
+        click.echo("DEBUG: Closing session in delete_foodentry", err=True)
+        session.close()

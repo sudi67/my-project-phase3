@@ -62,15 +62,21 @@ def user():
 @click.option('--email', required=True, help='Email of the user')
 def create(name, email):
     session = SessionLocal()
-    if session.query(User).filter_by(username=name).first():
-        click.echo(f"User '{name}' already exists.")
+    try:
+        if session.query(User).filter_by(username=name).first():
+            click.echo(f"User '{name}' already exists.")
+            return
+        user = User(username=name, email=email)
+        session.add(user)
+        session.commit()
+        click.echo(f"User '{name}' created.")
+    except Exception as e:
+        click.echo(f"Error creating user: {e}", err=True)
+        session.rollback()
+        raise
+    finally:
+        click.echo("DEBUG: Closing session in user create", err=True)
         session.close()
-        return
-    user = User(username=name, email=email)
-    session.add(user)
-    session.commit()
-    click.echo(f"User '{name}' created.")
-    session.close()
 
 @user.command()
 def list():
@@ -82,6 +88,26 @@ def list():
         for user in users:
             click.echo(f"ID: {user.id}, Name: {user.username}")
     session.close()
+
+@user.command()
+@click.option('--user-id', type=int, required=True, help='User ID')
+def delete(user_id):
+    session = SessionLocal()
+    try:
+        user = session.query(User).filter(User.id == user_id).first()
+        if not user:
+            click.echo("User not found.")
+            return
+        session.delete(user)
+        session.commit()
+        click.echo("User deleted.")
+    except Exception as e:
+        click.echo(f"Error deleting user: {e}", err=True)
+        session.rollback()
+        raise
+    finally:
+        click.echo("DEBUG: Closing session in user delete", err=True)
+        session.close()
 
 @cli.group()
 def foodentry():

@@ -26,6 +26,25 @@ This project is a Health Tracker CLI application implemented in Python. It uses 
 - Meal plan management: create, list, update, delete meal plans.
 - Commands are implemented using Click groups and options.
 
+## How to Run
+
+1. Install dependencies from `requirements.txt`:
+   ```
+   pip install -r requirements.txt
+   ```
+
+2. Initialize the database:
+   ```
+   python -m health_tracker.cli init
+   ```
+
+3. Use CLI commands to manage users, food entries, and meal plans. Examples:
+   ```
+   python -m health_tracker.cli user create --name Alice --email alice@example.com
+   python -m health_tracker.cli foodentry create --user-id 1 --name Apple --calories 95
+   python -m health_tracker.cli mealplan create --user-id 1 --date 2024-01-01 --meal-type breakfast
+   ```
+
 ## Testing
 
 - Unit tests cover individual CLI commands and database operations.
@@ -36,34 +55,16 @@ This project is a Health Tracker CLI application implemented in Python. It uses 
 
 ### How to Run Tests
 
-To run all tests, use the following command in the project root directory:
-
-```bash
+Run all tests with:
+```
 pytest --disable-warnings -q
 ```
-
-This will run all unit and integration tests quietly, suppressing warnings.
 
 ## Known Issues
 
 - Integration test for food entry creation currently fails due to database session or transaction handling issues.
 - Database logs show rollbacks after user selection, indicating possible session conflicts.
 - Investigation and fixes are ongoing to resolve these issues.
-
-## How to Run
-
-1. Install dependencies from `requirements.txt`.
-2. Initialize the database:
-   ```
-   python -m health_tracker.cli init
-   ```
-3. Use CLI commands to manage users, food entries, and meal plans:
-   ```
-   python -m health_tracker.cli user create --name Alice --email alice@example.com
-   python -m health_tracker.cli foodentry create --user-id 1 --name Apple --calories 95
-   python -m health_tracker.cli mealplan create --user-id 1 --date 2024-01-01 --meal-type breakfast
-   ```
-4. Run tests as described above.
 
 ## Next Steps
 
