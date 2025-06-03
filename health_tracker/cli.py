@@ -75,8 +75,10 @@ def create(name, email):
         session.rollback()
         raise
     finally:
-        click.echo("DEBUG: Closing session in user create", err=True)
-        session.close()
+        try:
+            session.close()
+        except Exception as e:
+            click.echo(f"Error closing session: {e}", err=True)
 
 @user.command()
 def list():

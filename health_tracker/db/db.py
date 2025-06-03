@@ -12,7 +12,8 @@ except ImportError:
 if 'pytest' in sys.modules or 'unittest' in sys.modules or 'test' in sys.argv[0]:
     DATABASE_URL = 'sqlite:///./test.db'
 else:
-    DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost:5432/mydatabase')
+    # Default to SQLite to avoid PostgreSQL auth errors
+    DATABASE_URL = 'sqlite:///./test.db'
 
 if psycopg2 is None:
     # Fallback to SQLite if psycopg2 is not installed
