@@ -44,9 +44,16 @@ from health_tracker.models import User
 from health_tracker.db import SessionLocal
 from health_tracker.models.controlers import cli_foodentry, cli_mealplan
 
+import health_tracker.cli_interactive
+
 @click.group()
 def cli():
     pass
+
+@cli.command()
+def interactive():
+    """Launch interactive CLI mode."""
+    health_tracker.cli_interactive.interactive()
 
 @cli.command()
 def init():
