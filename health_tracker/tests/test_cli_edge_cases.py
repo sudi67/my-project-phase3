@@ -40,7 +40,7 @@ class TestCLIEdgeCases(unittest.TestCase):
     def test_mealplan_update_invalid_date(self):
         result = self.runner.invoke(self.cli, ['mealplan', 'update', '--mealplan-id', '1', '--date', 'invalid-date'])
         self.assertNotEqual(result.exit_code, 0)
-        self.assertIn("Invalid date format", result.output)
+        self.assertIn("Invalid value: Invalid date format. Use YYYY-MM-DD.", result.output)
 
 if __name__ == '__main__':
     unittest.main()

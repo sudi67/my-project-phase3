@@ -41,8 +41,20 @@ class TestCLIIntegration(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertIn('MealPlan created', result.output)
 
+        # Parse mealplan ID from create output
+        mealplan_id = None
+        for line in result.output.splitlines():
+            if 'MealPlan created' in line:
+                # Example line: MealPlan created: <MealPlan(id=1, date=2024-01-01, week=None, day=None, meal_type='breakfast', calories=None, fat=None, protein=None)>
+                start = line.find('id=') + 3
+                end = line.find(',', start)
+                if start > 2 and end > start:
+                    mealplan_id = line[start:end].strip()
+                    break
+        self.assertIsNotNone(mealplan_id)
+
         # Update the meal plan
-        result = self.runner.invoke(cli, ['mealplan', 'update', '--mealplan-id', '1', '--meal-type', 'lunch'])
+        result = self.runner.invoke(cli, ['mealplan', 'update', '--mealplan-id', mealplan_id, '--meal-type', 'lunch'])
         self.assertEqual(result.exit_code, 0)
         self.assertIn('MealPlan updated', result.output)
      

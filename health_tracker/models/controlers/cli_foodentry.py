@@ -1,10 +1,15 @@
 import click
+import logging
+from typing import Optional
 from health_tracker.db import SessionLocal
 from health_tracker.db.db_operations import create_foodentry, update_foodentry, delete_foodentry
 from health_tracker.models import FoodEntry
 
+logger = logging.getLogger(__name__)
+
 @click.group()
 def foodentry():
+    """Commands to manage food entries."""
     pass
 
 @foodentry.command()
@@ -14,24 +19,20 @@ def foodentry():
 @click.option('--protein', type=float, help='Protein')
 @click.option('--fat', type=float, help='Fat')
 @click.option('--carbs', type=float, help='Carbohydrates')
-def create(user_id, name, calories, protein, fat, carbs):
+def create(user_id: int, name: str, calories: float, protein: Optional[float], fat: Optional[float], carbs: Optional[float]):
     """Create a new food entry."""
     session = SessionLocal()
     try:
-        click.echo("DEBUG: Starting create_foodentry", err=True)
+        logger.info(f"Creating food entry for user_id={user_id}, name={name}")
         foodentry = create_foodentry(session, user_id=user_id, name=name, calories=calories, protein=protein, fat=fat, carbs=carbs)
-        click.echo(f"DEBUG: FoodEntry object: {foodentry}", err=True)
         click.echo(f"FoodEntry created with ID: {foodentry.id}")
-        click.echo("DEBUG: Finished create_foodentry", err=True)
+        logger.info(f"FoodEntry created with ID: {foodentry.id}")
     except Exception as e:
-        click.echo(f"Error creating FoodEntry: {e}", err=True)
+        logger.error(f"Error creating FoodEntry: {e}", exc_info=True)
         session.rollback()
-        click.echo("DEBUG: Rolled back session due to error", err=True)
-        import traceback
-        click.echo(traceback.format_exc(), err=True)
+        click.echo(f"Error creating FoodEntry: {e}", err=True)
         raise
     finally:
-        click.echo("DEBUG: Closing session in create_foodentry", err=True)
         session.close()
 
 @foodentry.command()
@@ -44,6 +45,19 @@ def list():
     else:
         for fe in foodentries:
             click.echo(f"ID: {fe.id}, User ID: {fe.user_id}, Name: {fe.name}, Calories: {fe.calories}")
+    session.close()
+
+@foodentry.command()
+@click.option('--user-id', required=True, type=int, help='User ID')
+def list_by_user(user_id):
+    """List food entries for a specific user."""
+    session = SessionLocal()
+    foodentries = session.query(FoodEntry).filter(FoodEntry.user_id == user_id).all()
+    if not foodentries:
+        click.echo(f"No food entries found for user ID {user_id}.")
+    else:
+        for fe in foodentries:
+            click.echo(f"ID: {fe.id}, Name: {fe.name}, Calories: {fe.calories}")
     session.close()
 
 @foodentry.command()

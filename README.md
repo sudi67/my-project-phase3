@@ -45,6 +45,11 @@ This project is a Health Tracker CLI application implemented in Python. It uses 
    python -m health_tracker.cli mealplan create --user-id 1 --date 2024-01-01 --meal-type breakfast
    ```
 
+4. Alternatively, use the interactive CLI mode to add multiple entries in one session:
+   ```
+   python3 main.py interactive
+   ```
+
 ## Testing
 
 - Unit tests cover individual CLI commands and database operations.

@@ -8,16 +8,15 @@ try:
 except ImportError:
     psycopg2 = None
 
+# Read DATABASE_URL from environment variable
+DATABASE_URL = os.getenv('DATABASE_URL')
+
 # Force SQLite for tests to avoid PostgreSQL auth errors
 if 'pytest' in sys.modules or 'unittest' in sys.modules or 'test' in sys.argv[0]:
     DATABASE_URL = 'sqlite:///./test.db'
-else:
-    # Default to SQLite to avoid PostgreSQL auth errors
-    DATABASE_URL = 'sqlite:///./test.db'
 
-if psycopg2 is None:
-    # Fallback to SQLite if psycopg2 is not installed
-    DATABASE_URL = 'sqlite:///./test.db'
+# Fallback to SQLite regardless of DATABASE_URL or psycopg2 presence
+DATABASE_URL = 'sqlite:///./test.db'
 
 engine = create_engine(DATABASE_URL, echo=True)
 

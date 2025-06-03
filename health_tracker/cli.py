@@ -148,12 +148,26 @@ def delete(foodentry_id):
 def mealplan():
     pass
 
+from datetime import datetime
+import click
+from health_tracker.models.controlers import cli_mealplan
+
 @mealplan.command()
 @click.option('--user-id', type=int, required=True, help='User ID')
 @click.option('--date', required=True, help='Date in YYYY-MM-DD format')
 @click.option('--meal-type', required=True, help='Meal type (e.g., breakfast, lunch)')
-def create(user_id, date, meal_type):
-    cli_mealplan.create_mealplan_cmd(user_id, date, meal_type)
+@click.option('--week', type=int, help='Week number')
+@click.option('--day', type=int, help='Day number')
+@click.option('--food-name', help='Food name')
+@click.option('--calories', type=float, help='Calories')
+@click.option('--fat', type=float, help='Fat')
+@click.option('--protein', type=float, help='Protein')
+def create(user_id, date, meal_type, week=None, day=None, food_name=None, calories=None, fat=None, protein=None):
+    try:
+        date_obj = datetime.strptime(date, "%Y-%m-%d").date()
+    except ValueError:
+        raise click.BadParameter("Invalid date format. Use YYYY-MM-DD.")
+    cli_mealplan.create_mealplan_cmd(user_id, date_obj, meal_type, week=week, day=day, food_name=food_name, calories=calories, fat=fat, protein=protein)
 
 @mealplan.command()
 def list():
@@ -163,8 +177,14 @@ def list():
 @click.option('--mealplan-id', type=int, required=True, help='MealPlan ID')
 @click.option('--date', help='New date in YYYY-MM-DD format')
 @click.option('--meal-type', help='New meal type')
-def update(mealplan_id, date, meal_type):
-    cli_mealplan.update_mealplan_cmd(mealplan_id, date, meal_type)
+@click.option('--week', type=int, help='New week number')
+@click.option('--day', type=int, help='New day number')
+@click.option('--food-name', help='New food name')
+@click.option('--calories', type=float, help='New calories')
+@click.option('--fat', type=float, help='New fat')
+@click.option('--protein', type=float, help='New protein')
+def update(mealplan_id, date, meal_type, week=None, day=None, food_name=None, calories=None, fat=None, protein=None):
+    cli_mealplan.update_mealplan_cmd(mealplan_id, date, meal_type, week=week, day=day, food_name=food_name, calories=calories, fat=fat, protein=protein)
 
 @mealplan.command()
 @click.option('--mealplan-id', type=int, required=True, help='MealPlan ID')
