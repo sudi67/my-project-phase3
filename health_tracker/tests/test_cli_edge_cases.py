@@ -20,9 +20,6 @@ class TestCLIEdgeCases(unittest.TestCase):
     def test_user_create_duplicate(self):
         self.runner.invoke(self.cli, ['user', 'create', '--name', 'user2', '--email', 'user2@example.com'])
         result = self.runner.invoke(self.cli, ['user', 'create', '--name', 'user2', '--email', 'user2@example.com'], catch_exceptions=False)
-        print("Output:", result.output)
-        print("Exception:", result.exception)
-        print("Exit code:", result.exit_code)
         self.assertIn("already exists", result.output)
 
     def test_foodentry_create_missing_required(self):
@@ -31,16 +28,13 @@ class TestCLIEdgeCases(unittest.TestCase):
 
     def test_mealplan_create_invalid_date(self):
         result = self.runner.invoke(self.cli, ['mealplan', 'create', '--user-id', '1', '--date', 'invalid-date', '--meal-type', 'lunch'], catch_exceptions=False)
-        print("Output:", result.output)
-        print("Exception:", result.exception)
-        print("Exit code:", result.exit_code)
         self.assertNotEqual(result.exit_code, 0)
         self.assertIn("Invalid value: Invalid date format. Use YYYY-MM-DD.", result.output)
 
     def test_mealplan_update_invalid_date(self):
-        result = self.runner.invoke(self.cli, ['mealplan', 'update', '--mealplan-id', '1', '--date', 'invalid-date'])
+        result = self.runner.invoke(self.cli, ['mealplan', 'update', '--mealplan-id', '1', '--date', 'invalid-date'], catch_exceptions=False)
         self.assertNotEqual(result.exit_code, 0)
-        self.assertIn("Invalid value: Invalid date format. Use YYYY-MM-DD.", result.output)
+        self.assertIn("Invalid value: Invalid date format. Use YYYY-MM-DD or DD-MM-YYYY or MM/DD/YYYY.", result.output)
 
 if __name__ == '__main__':
     unittest.main()

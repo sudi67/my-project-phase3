@@ -184,7 +184,7 @@ def list():
 @click.option('--fat', type=float, help='New fat')
 @click.option('--protein', type=float, help='New protein')
 def update(mealplan_id, date, meal_type, week=None, day=None, food_name=None, calories=None, fat=None, protein=None):
-    cli_mealplan.update_mealplan_cmd(mealplan_id, date, meal_type, week=week, day=day, food_name=food_name, calories=calories, fat=fat, protein=protein)
+    cli_mealplan.update_mealplan_cmd(mealplan_id, date, week=week, day=day, food_name=food_name, meal_type=meal_type, calories=calories, fat=fat, protein=protein)
 
 @mealplan.command()
 @click.option('--mealplan-id', type=int, required=True, help='MealPlan ID')
